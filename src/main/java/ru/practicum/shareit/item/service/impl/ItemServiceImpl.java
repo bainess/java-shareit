@@ -67,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
 
         if (itemsFound == null) {
-            new NotFoundException("No item matching description was found");
+            throw new NotFoundException("No item matching description was found");
         }
 
         return itemsFound;
