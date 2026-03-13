@@ -34,6 +34,7 @@ public class UserRepository {
         users.put(userId, user);
         return Optional.of(user);
     }
+
     public void deleteUser(Long userId) {
         users.remove(userId);
     }
