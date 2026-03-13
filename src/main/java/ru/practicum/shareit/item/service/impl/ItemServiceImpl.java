@@ -42,6 +42,11 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Item was not found"));
     }
 
+    @Override
+    public ItemDto searchItem(String text) {
+        return null;
+    }
+
     public List<ItemDto> searchItems(String text) {
         List<ItemDto> itemsFound = itemRepository.searchForItem(text).stream()
                 .map(ItemMapper::itemToDto)
