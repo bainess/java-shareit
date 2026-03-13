@@ -10,6 +10,8 @@ import ru.practicum.shareit.item.dal.ItemInMemoryRepository;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -42,10 +44,6 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Item was not found"));
     }
 
-    @Override
-    public ItemDto searchItem(String text) {
-        return null;
-    }
 
     public List<ItemDto> searchItems(String text) {
         List<ItemDto> itemsFound = itemRepository.searchForItem(text).stream()

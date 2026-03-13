@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Repository
 public class ItemInMemoryRepository {
@@ -41,9 +42,9 @@ public class ItemInMemoryRepository {
         return filteredItems;
     }
 
-    public List<Item> searchForItem(String text) {
+    public List<Item> searchForItem(String searchedItem) {
         return items.values().stream()
-                .filter(item -> item.getName().contains(text) || item.getDescription().contains(text))
+                .filter(item -> item.getName().contains(searchedItem) || item.getDescription().contains(searchedItem))
                 .filter(Item::isAvailable)
                 .toList();
     }
