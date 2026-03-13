@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.service.UserService;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+
     @Override
     public UserDto saveUser(User user) {
         if (userRepository.getEmails().contains(user.getEmail())) {

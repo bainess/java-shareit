@@ -17,7 +17,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam(name="text") String text) {
+    public List<ItemDto> searchItems(@RequestParam(name = "text") String text) {
         return itemService.searchItems(text);
     }
 
@@ -30,19 +30,20 @@ public class ItemController {
 
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable(name="itemId") Long itemId) {
+    public ItemDto getItemById(@PathVariable(name = "itemId") Long itemId) {
         return itemService.getItemById(itemId);
     }
 
     @PostMapping
     public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                         @Valid @RequestBody Item item) {
-        return itemService.saveItem(userId ,item);
+        return itemService.saveItem(userId, item);
     }
+
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                            @RequestBody UpdateItemRequest item,
-                              @PathVariable(name="itemId") Long itemId) {
+                              @PathVariable(name = "itemId") Long itemId) {
         return itemService.updateItem(userId, itemId, item);
     }
 }

@@ -68,7 +68,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (itemsFound == null) {
             new NotFoundException("No item matching description was found");
-        };
+        }
 
         return itemsFound;
 

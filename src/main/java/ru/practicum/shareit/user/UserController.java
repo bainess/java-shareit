@@ -26,19 +26,19 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UpdateUserRequest request,
-                                              @PathVariable(name="userId") Long userId) {
+                                              @PathVariable(name = "userId") Long userId) {
         UserDto user = userService.updateUser(userId, request);
         log.info("Updated user.id: {}", request.getId());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
-    public Long deleteUser(@PathVariable(name="userId") Long userId) {
+    public Long deleteUser(@PathVariable(name = "userId") Long userId) {
         return userService.removeUser(userId);
     }
 
     @GetMapping("/{userId}")
-    public UserDto getUser(@PathVariable(name="userId") Long userId) {
+    public UserDto getUser(@PathVariable(name = "userId") Long userId) {
         return userService.getUserById(userId);
     }
 }
