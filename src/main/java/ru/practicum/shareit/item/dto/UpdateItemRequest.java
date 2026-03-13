@@ -12,7 +12,7 @@ public class UpdateItemRequest {
     private Long owner;
     private String name;
     private String description;
-    private boolean available;
+    private Boolean available;
     private LocalDate bookedFrom;
     private LocalDate bookedTo;
 
