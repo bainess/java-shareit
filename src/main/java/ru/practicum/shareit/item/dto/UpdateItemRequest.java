@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareit.user.User;
 
 import java.time.LocalDate;
 
