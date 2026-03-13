@@ -25,7 +25,7 @@ public class UpdateItemRequest {
     }
 
     public boolean hasAvailability() {
-        return available;
+        return ! (available == null);
     }
 
     public boolean hasBookedFrom() {

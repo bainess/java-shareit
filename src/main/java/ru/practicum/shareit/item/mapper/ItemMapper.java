@@ -23,8 +23,9 @@ public final class ItemMapper {
             item.setDescription(request.getDescription());
         }
 
-        item.setAvailable(request.getAvailable());
-
+        if (request.hasAvailability()) {
+            item.setAvailable(request.getAvailable());
+        }
 
         if (request.hasBookedFrom()) {
             item.setBookedFrom(request.getBookedFrom());
