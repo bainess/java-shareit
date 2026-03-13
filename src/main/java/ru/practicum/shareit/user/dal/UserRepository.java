@@ -15,7 +15,8 @@ public class UserRepository {
     private Long id = 1L;
 
     public Optional<User> getUserById(Long userId) {
-        return Optional.of(users.get(userId));
+        User user = users.get(userId);
+        return Optional.ofNullable(user);
     }
 
     public User saveUser(User user) {

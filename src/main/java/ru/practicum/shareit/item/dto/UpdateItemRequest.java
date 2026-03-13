@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Setter
 public class UpdateItemRequest {
     private Long id;
-    private User owner;
+    private Long owner;
     private String name;
     private String description;
-    private boolean isAvailable;
+    private boolean available;
     private LocalDate bookedFrom;
     private LocalDate bookedTo;
 
@@ -26,7 +26,7 @@ public class UpdateItemRequest {
     }
 
     public boolean hasAvailability() {
-        return isAvailable;
+        return available;
     }
 
     public boolean hasBookedFrom() {

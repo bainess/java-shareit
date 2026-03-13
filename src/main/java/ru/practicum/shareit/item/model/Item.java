@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,10 +14,16 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class Item {
     private Long id;
-    private User owner;
+    private Long owner;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String description;
-    private boolean isAvailable;
+
+    @NotNull
+    private Boolean available;
     private LocalDate bookedFrom;
     private LocalDate bookedTo;
 }

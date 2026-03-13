@@ -7,11 +7,11 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemService {
-    ItemDto updateItem(Long itemId, UpdateItemRequest request);
+    ItemDto updateItem(Long userId, Long itemId, UpdateItemRequest request);
 
     List<ItemDto> findAllItemsByUser(Long userId);
 
-    ItemDto saveItem(Item item);
+    ItemDto saveItem(Long userId, Item item);
 
     ItemDto getItemById(Long itemId);
 

@@ -10,6 +10,7 @@ public final class ItemMapper {
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
         return dto;
     }
 

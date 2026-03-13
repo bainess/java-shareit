@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -8,24 +9,31 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.dal.ItemInMemoryRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemInMemoryRepository itemRepository;
+    private final UserService userService;
 
-    public ItemServiceImpl(ItemInMemoryRepository itemRepository) {
+    public ItemServiceImpl(ItemInMemoryRepository itemRepository, UserService userService) {
         this.itemRepository = itemRepository;
+        this.userService = userService;
     }
 
     public List<ItemDto> findAllItemsByUser(Long userId) {
         return itemRepository.getAllItemsByUser(userId).stream().map(ItemMapper::itemToDto).toList();
     }
 
-    public ItemDto updateItem(Long itemId, UpdateItemRequest request) {
+    public ItemDto updateItem(Long userId, Long itemId, UpdateItemRequest request) {
+        if (userService.getUserById(userId) == null) {
+            throw new NotFoundException("User does not exist");
+        }
+
         Item updatedItem = itemRepository.getItem(itemId)
                 .map(item -> ItemMapper.updateItemFields(item, request))
                 .orElseThrow(() -> new NotFoundException("Item was not found"));
@@ -33,9 +41,18 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.itemToDto(updatedItem);
     }
 
-    public ItemDto saveItem(Item item) {
-        Item newItem = itemRepository.saveItem(item);
-        return ItemMapper.itemToDto(item);
+    public ItemDto saveItem(Long userId, Item item) {
+        if (userId == null) {
+            throw new NotFoundException("User does not exist");
+        }
+        if (item.getAvailable() == null) {
+            throw new IllegalArgumentException("Availability should be set");
+        }
+
+        userService.getUserById(userId);
+        item.setOwner(userId);
+        Item newItem = itemRepository.saveItem(userId, item);
+        return ItemMapper.itemToDto(newItem);
     }
 
     public ItemDto getItemById(Long itemId) {
@@ -46,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     public List<ItemDto> searchItems(String text) {
-        List<ItemDto> itemsFound = itemRepository.searchForItem(text).stream()
+        List<ItemDto> itemsFound = itemRepository.searchForItem(text.toLowerCase()).stream()
                 .map(ItemMapper::itemToDto)
                 .toList();
 
