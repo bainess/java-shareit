@@ -1,8 +1,7 @@
 package ru.practicum.shareit.exception.handler;
 
 import org.springframework.http.HttpStatus;
-import ru.practicum.shareit.exception.DublicatedDataException;
-import ru.practicum.shareit.exception.handler.ErrorResponse;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,9 +16,9 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), "not found");
     }
 
-    @ExceptionHandler(DublicatedDataException.class)
+    @ExceptionHandler(DuplicatedDataException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDuplicatedDataException(final DublicatedDataException e) {
+    public ErrorResponse handleDuplicatedDataException(final DuplicatedDataException e) {
         return new ErrorResponse(e.getMessage(), "insufficient data");
     }
 
