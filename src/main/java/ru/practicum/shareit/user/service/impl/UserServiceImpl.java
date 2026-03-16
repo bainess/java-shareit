@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.service.impl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.DublicatedDataException;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(NewUserRequest request) {
         if (userRepository.getEmails().contains(request.getEmail())) {
-            throw new DublicatedDataException("This email is registered");
+            throw new DuplicatedDataException("This email is registered");
         }
 
         User user = UserMapper.mapToUser(request);
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(Long userId, UpdateUserRequest request) {
         if (userRepository.getEmails().contains(request.getEmail())) {
-            throw new DublicatedDataException("This email is registered");
+            throw new DuplicatedDataException("This email is registered");
         }
 
         User updatedUser = userRepository.getUserById(userId)
