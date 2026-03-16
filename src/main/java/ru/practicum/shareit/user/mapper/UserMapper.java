@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -16,6 +17,13 @@ public final class UserMapper {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         return dto;
+    }
+
+    public static User mapToUser(NewUserRequest request) {
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        return user;
     }
 
     public static User fieldsToUpdate(User user, UpdateUserRequest request) {

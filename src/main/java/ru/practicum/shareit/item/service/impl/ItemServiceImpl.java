@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
@@ -40,18 +41,19 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.itemToDto(updatedItem);
     }
 
-    public ItemDto saveItem(Long userId, Item item) {
+    public ItemDto saveItem(Long userId, NewItemRequest request) {
         if (userId == null) {
             throw new NotFoundException("User does not exist");
         }
-        if (item.getAvailable() == null) {
+        if (request.getAvailable() == null) {
             throw new IllegalArgumentException("Availability should be set");
         }
 
         userService.getUserById(userId);
-        item.setOwner(userId);
-        Item newItem = itemRepository.saveItem(userId, item);
-        return ItemMapper.itemToDto(newItem);
+
+        Item item = ItemMapper.mapToItem(userId, request);
+                itemRepository.saveItem(userId, item);
+        return ItemMapper.itemToDto(item);
     }
 
     public ItemDto getItemById(Long itemId) {

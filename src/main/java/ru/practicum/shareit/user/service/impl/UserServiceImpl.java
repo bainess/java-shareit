@@ -7,6 +7,7 @@ import ru.practicum.shareit.exception.DublicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
+import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -19,13 +20,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserDto saveUser(User user) {
-        if (userRepository.getEmails().contains(user.getEmail())) {
+    public UserDto saveUser(NewUserRequest request) {
+        if (userRepository.getEmails().contains(request.getEmail())) {
             throw new DublicatedDataException("This email is registered");
         }
 
-        User newUser = userRepository.saveUser(user);
-        return UserMapper.maptoUserDto(newUser);
+        User user = UserMapper.mapToUser(request);
+        user = userRepository.saveUser(user);
+        return UserMapper.maptoUserDto(user);
     }
 
     @Override
