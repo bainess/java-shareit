@@ -38,14 +38,6 @@ public final class ItemMapper {
             item.setAvailable(request.getAvailable());
         }
 
-        if (request.hasBookedFrom()) {
-            item.setBookedFrom(request.getBookedFrom());
-        }
-
-        if (request.hasBookedTo()) {
-            item.setBookedTo(request.getBookedTo());
-        }
-
         return item;
     }
 }

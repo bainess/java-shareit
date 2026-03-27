@@ -35,12 +35,6 @@ public class Item {
     @NotNull
     private Boolean available;
 
-    @Column(name = "booked_from")
-    private LocalDate bookedFrom;
-
-    @Column(name = "booked_to")
-    private LocalDate bookedTo;
-
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

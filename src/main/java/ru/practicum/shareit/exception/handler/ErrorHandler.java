@@ -5,7 +5,11 @@ import ru.practicum.shareit.exception.DuplicatedDataException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.ForbiddenException;
+import ru.practicum.shareit.exception.IllegalAccessException;
 import ru.practicum.shareit.exception.NotFoundException;
+
+import java.awt.*;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -26,5 +30,17 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception e) {
         return new ErrorResponse(e.getMessage(), "internal error");
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(final IllegalAccessException e) {
+        return new ErrorResponse(e.getMessage(), "illegal argument");
+    }
+
+    @ExceptionHandler(FontFormatException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleIllegalArgumentException(final ForbiddenException e) {
+        return new ErrorResponse(e.getMessage(), "access forbidden");
     }
 }
