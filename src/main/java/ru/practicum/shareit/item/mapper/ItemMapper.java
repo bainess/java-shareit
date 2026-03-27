@@ -4,6 +4,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
 public final class ItemMapper {
     public static ItemDto itemToDto(Item item) {
@@ -15,12 +16,12 @@ public final class ItemMapper {
         return dto;
     }
 
-    public static Item mapToItem(Long userId, NewItemRequest request) {
+    public static Item mapToItem(User user, NewItemRequest request) {
         Item item = new Item();
         item.setName(request.getName());
         item.setDescription(request.getDescription());
         item.setAvailable(request.getAvailable());
-        item.setOwner(userId);
+        item.setOwner(user);
         return item;
     }
 

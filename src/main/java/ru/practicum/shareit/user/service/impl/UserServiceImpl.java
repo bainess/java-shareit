@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.service.UserService;
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
         User updatedUser = userRepository.findById(userId)
                 .map(user -> UserMapper.fieldsToUpdate(user,request))
                 .orElseThrow(() -> new NotFoundException("User was not found"));
+        userRepository.save(updatedUser);
         return UserMapper.maptoUserDto(updatedUser);
     }
 

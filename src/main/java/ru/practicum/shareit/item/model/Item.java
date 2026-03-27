@@ -1,28 +1,55 @@
 package ru.practicum.shareit.item.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import ru.practicum.shareit.user.User;
 
 import java.time.LocalDate;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
+@Entity
+@ToString
+@Table(name = "items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long owner;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 
     @NotBlank
+    @Column(nullable = false)
     private String name;
 
     @NotBlank
+    @Column(nullable = false)
     private String description;
 
     @NotNull
     private Boolean available;
+
+    @Column(name = "booked_from")
     private LocalDate bookedFrom;
+
+    @Column(name = "booked_to")
     private LocalDate bookedTo;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof User)) return false;
+        return id != null && id.equals(((User) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

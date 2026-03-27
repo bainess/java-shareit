@@ -1,43 +1,42 @@
 package ru.practicum.shareit.item.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dal.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.dal.ItemInMemoryRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dal.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
-    private final ItemInMemoryRepository itemRepository;
-    private final UserService userService;
-
-    public ItemServiceImpl(ItemInMemoryRepository itemRepository, UserService userService) {
-        this.itemRepository = itemRepository;
-        this.userService = userService;
-    }
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     public List<ItemDto> findAllItemsByUser(Long userId) {
-        return itemRepository.getAllItemsByUser(userId).stream().map(ItemMapper::itemToDto).toList();
+        return itemRepository.findByOwnerId(userId).stream().map(ItemMapper::itemToDto).toList();
     }
 
     public ItemDto updateItem(Long userId, Long itemId, UpdateItemRequest request) {
-        if (userService.getUserById(userId) == null) {
-            throw new NotFoundException("User does not exist");
-        }
+        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User " + userId + "was not found"));
 
-        Item updatedItem = itemRepository.getItem(itemId)
+        Item updatedItem = itemRepository.findById(itemId)
                 .map(item -> ItemMapper.updateItemFields(item, request))
                 .orElseThrow(() -> new NotFoundException("Item was not found"));
-        itemRepository.updateItem(updatedItem);
+        itemRepository.save(updatedItem);
         return ItemMapper.itemToDto(updatedItem);
     }
 
@@ -48,28 +47,31 @@ public class ItemServiceImpl implements ItemService {
         if (request.getAvailable() == null) {
             throw new IllegalArgumentException("Availability should be set");
         }
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User " + userId + "was not found"));
+        Item item = ItemMapper.mapToItem(user, request);
 
-        userService.getUserById(userId);
-
-        Item item = ItemMapper.mapToItem(userId, request);
-                itemRepository.saveItem(userId, item);
+                itemRepository.save(item);
         return ItemMapper.itemToDto(item);
     }
 
     public ItemDto getItemById(Long itemId) {
-        return itemRepository.getItem(itemId)
+        return itemRepository.findById(itemId)
                 .map(ItemMapper::itemToDto)
                 .orElseThrow(() -> new NotFoundException("Item was not found"));
     }
 
 
     public List<ItemDto> searchItems(String text) {
-        List<ItemDto> itemsFound = itemRepository.searchForItem(text.toLowerCase()).stream()
+        if (text.isEmpty()) {return new ArrayList<>(); }
+        List<ItemDto> itemsFound = itemRepository
+                .findByAvailableTrueAndNameContainingIgnoreCaseOrAvailableTrueAndDescriptionContainingIgnoreCase(
+                        text, text)
+                .stream()
                 .map(ItemMapper::itemToDto)
                 .toList();
 
-        if (itemsFound == null) {
-            throw new NotFoundException("No item matching description was found");
+        if (itemsFound .isEmpty()) {
+           return new ArrayList<>();
         }
 
         return itemsFound;
