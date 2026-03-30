@@ -19,7 +19,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +32,7 @@ public class BookingService {
     private final ItemRepository itemRepository;
 
     public List<BookingDto> findBookingsByBookerAndState(Long userId, State state) {
-        if (!userRepository.existsById(userId)) {throw new IllegalAccessException("User" + userId+ "does not exist");}
+        if (!userRepository.existsById(userId)) {throw new IllegalAccessException("User " + userId+ " does not exist");}
         LocalDateTime now = LocalDateTime.now();
 
         log.info("user id {} requests {}", userId, state);
@@ -54,11 +53,9 @@ public class BookingService {
     }
 
     public List<BookingDto> findBookingsByOwnerAndState(Long userId, State state) {
+        if (!userRepository.existsById(userId)) {throw new NotFoundException("User " + userId + " does not exist");}
         LocalDateTime now = LocalDateTime.now();
 
-        log.info("user id {} requests {}", userId, state);
-
-        System.out.println(bookingRepository.findByBooker_Id(userId));
         return switch(state) {
             case CURRENT -> bookingRepository.findByItem_Owner_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
@@ -78,9 +75,9 @@ public class BookingService {
     public BookingDto checkBooking(Long  bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking " + bookingId + " was not found"));
-        log.debug(booking.toString());
 
-        if (!Objects.equals(userId, booking.getBooker().getId())) {
+        if (!Objects.equals(userId, booking.getBooker().getId())
+                && !Objects.equals(userId, booking.getItem().getOwner().getId())) {
             throw new IllegalAccessException("User " + userId + "   does not have access to the booking");
         }
 
