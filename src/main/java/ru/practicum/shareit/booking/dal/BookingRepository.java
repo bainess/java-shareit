@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,7 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findByIdAndBookerId(Long id, Long userId);
-    
+
     List<Booking> findByItem_Owner_IdOrderByStartDesc(Long userId);
 
     List<Booking> findByItem_Owner_IdAndStartBeforeAndEndAfterOrderByStartDesc(Long userId, LocalDateTime now1, LocalDateTime now2);

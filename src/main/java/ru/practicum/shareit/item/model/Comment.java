@@ -1,13 +1,10 @@
 package ru.practicum.shareit.item.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;

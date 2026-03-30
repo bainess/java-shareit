@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto saveComment(Long userId, Long itemId, NewCommentRequest request) {
         log.debug(request.getText());
         LocalDateTime created = LocalDateTime.now();
-        if (!bookingRepository.existsByItem_IdAndBooker_IdAndEndBefore(itemId, userId, created) ) {
+        if (!bookingRepository.existsByItem_IdAndBooker_IdAndEndBefore(itemId, userId, created)) {
             throw new NotFoundException(" User" + userId + " did not book the item" + itemId);
         }
         Comment comment = CommentMapper.mapToComment(request);
@@ -62,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime now = LocalDateTime.now();
                     Booking lastBooking = bookingRepository.findFirstByItem_IdAndEndAfterOrderByEndDesc(item.getId(), now).orElse(new Booking());
                     Booking nextBooking = bookingRepository.findFirstByItem_IdAndStartAfterOrderByStartAsc(item.getId(), now).orElse(new Booking());
-                    log.debug("next booking{}",nextBooking);
+                    log.debug("next booking{}", nextBooking);
                     return ItemMapper.itemToDtoWithBookingDatesAndComments(item, lastBooking.getEnd(), nextBooking.getEnd());
                 })
                 .toList();
@@ -112,7 +112,9 @@ public class ItemServiceImpl implements ItemService {
 
 
     public List<ItemDto> searchItems(String text) {
-        if (text.isEmpty()) {return new ArrayList<>(); }
+        if (text.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<ItemDto> itemsFound = itemRepository
                 .findByAvailableTrueAndNameContainingIgnoreCaseOrAvailableTrueAndDescriptionContainingIgnoreCase(
                         text, text)
@@ -120,8 +122,8 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemMapper::itemToDto)
                 .toList();
 
-        if (itemsFound .isEmpty()) {
-           return new ArrayList<>();
+        if (itemsFound.isEmpty()) {
+            return new ArrayList<>();
         }
 
         return itemsFound;

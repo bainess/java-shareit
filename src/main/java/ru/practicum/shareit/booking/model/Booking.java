@@ -23,7 +23,7 @@ public class Booking {
     @Column(name = "booking_from", nullable = false)
     private LocalDateTime start;
 
-    @Column(name = "booking_to",nullable = false)
+    @Column(name = "booking_to", nullable = false)
     private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.EAGER)
