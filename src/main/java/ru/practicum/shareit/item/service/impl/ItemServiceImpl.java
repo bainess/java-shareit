@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dal.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.CommentRepository;
 import ru.practicum.shareit.item.dal.ItemRepository;
@@ -95,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
 
     public ItemDtoWithBookingDatesAndComments getItemById(Long itemId) {
         LocalDateTime now = LocalDateTime.now();
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item was not found"));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ForbiddenException("Item was not found"));
         Booking lastBooking = bookingRepository.findFirstByItem_IdAndEndAfterOrderByEndDesc(item.getId(), now)
                 .orElse(new Booking());
         Booking nextBooking = bookingRepository.findFirstByItem_IdAndStartAfterOrderByStartAsc(item.getId(), now)
