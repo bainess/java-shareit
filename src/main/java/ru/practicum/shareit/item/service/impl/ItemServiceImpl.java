@@ -40,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto saveComment(Long userId, Long itemId, NewCommentRequest request) {
         log.debug(request.getText());
         LocalDateTime created = LocalDateTime.now();
-        if (!bookingRepository.existsByItem_IdAndBooker_IdAndEndAfter(itemId, userId, created)) {
+        if (bookingRepository.existsByItem_IdAndBooker_IdAndEndAfter(itemId, userId, created)) {
             throw new IllegalAccessException(" User" + userId + " did not book the item" + itemId);
         }
         Comment comment = CommentMapper.mapToComment(request);
@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 
     public ItemDtoWithBookingDatesAndComments getItemById(Long userId, Long itemId) {
         LocalDateTime now = LocalDateTime.now();
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ForbiddenException("Item was not found"));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item was not found"));
         Booking lastBooking = bookingRepository.findFirstByItem_IdAndEndAfterOrderByEndDesc(item.getId(), now)
                 .orElse(new Booking());
         Booking nextBooking = bookingRepository.findFirstByItem_IdAndStartAfterOrderByStartAsc(item.getId(), now)
