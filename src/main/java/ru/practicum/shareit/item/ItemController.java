@@ -2,20 +2,34 @@ package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.comment.NewCommentRequest;
+import ru.practicum.shareit.item.dto.item.ItemDto;
+import ru.practicum.shareit.item.dto.item.ItemDtoWithBookingDatesAndComments;
+import ru.practicum.shareit.item.dto.item.NewItemRequest;
+import ru.practicum.shareit.item.dto.item.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto saveComment(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @PathVariable("itemId") Long itemId,
+                                    @RequestBody NewCommentRequest comment) {
+        return itemService.saveComment(userId, itemId, comment);
+    }
+
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
@@ -26,7 +40,8 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getItemsByUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDtoWithBookingDatesAndComments> getItemsByUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.debug("Request for items by user {}", userId);
         return itemService.findAllItemsByUser(userId);
     }
 
@@ -34,7 +49,8 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto getItemById(@PathVariable(name = "itemId") Long itemId) {
+    public ItemDtoWithBookingDatesAndComments getItemById(@PathVariable(name = "itemId") Long itemId) {
+        log.debug("request for item {}", itemId);
         return itemService.getItemById(itemId);
     }
 
