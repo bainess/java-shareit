@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.practicum.shareit.user.User;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -35,15 +36,23 @@ public class Item {
     @NotNull
     private Boolean available;
 
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (!(o instanceof User)) return false;
-        return id != null && id.equals(((User) o).getId());
+        if (!(o instanceof Item)) return false;
+        return id != null && id.equals(((Item) o).getId());
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setItem(this);
     }
 }

@@ -19,6 +19,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,12 +31,53 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
+    public List<BookingDto> findBookingsByBookerAndState(Long userId, State state) {
+        if (!userRepository.existsById(userId)) {throw new IllegalAccessException("User " + userId+ " does not exist");}
+        LocalDateTime now = LocalDateTime.now();
+
+        log.info("user id {} requests {}", userId, state);
+        return switch(state) {
+            case CURRENT -> bookingRepository.findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case PAST -> bookingRepository.findByBooker_IdAndEndBeforeOrderByStartDesc(userId, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case FUTURE -> bookingRepository.findByBooker_IdAndStartAfterOrderByStartDesc(userId, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case WAITING -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.WAITING)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case REJECTED -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.REJECTED)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case ALL -> bookingRepository.findByBooker_IdOrderByStartDesc(userId)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+        };
+    }
+
+    public List<BookingDto> findBookingsByOwnerAndState(Long userId, State state) {
+        if (!userRepository.existsById(userId)) {throw new NotFoundException("User " + userId + " does not exist");}
+        LocalDateTime now = LocalDateTime.now();
+
+        return switch(state) {
+            case CURRENT -> bookingRepository.findByItem_Owner_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case PAST -> bookingRepository.findByItem_Owner_IdAndEndBeforeOrderByStartDesc(userId, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case FUTURE -> bookingRepository.findByItem_Owner_IdAndStartAfterOrderByStartDesc(userId, now)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case WAITING -> bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(userId, State.WAITING)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case REJECTED -> bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(userId, State.REJECTED)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+            case ALL -> bookingRepository.findByItem_Owner_IdOrderByStartDesc(userId)
+                    .stream().map(BookingMapper::mapToBookingDto).toList();
+        };
+    }
+
     public BookingDto checkBooking(Long  bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking " + bookingId + " was not found"));
-        log.debug(booking.toString());
 
-        if (!Objects.equals(userId, booking.getBooker().getId())) {
+        if (!Objects.equals(userId, booking.getBooker().getId())
+                && !Objects.equals(userId, booking.getItem().getOwner().getId())) {
             throw new IllegalAccessException("User " + userId + "   does not have access to the booking");
         }
 
@@ -61,7 +103,14 @@ public class BookingService {
         return BookingMapper.mapToBookingDto(booking);
     }
 
-    public List<BookingDto> findAllBookingByUser(Long userId, State state) {
-
+    public BookingDto saveApproval(Long userId, Long bookingId, boolean isApproved) {
+        Booking booking = bookingRepository.findByIdAndItem_Owner_Id(bookingId, userId);
+        if (isApproved) {
+            booking.setStatus(Status.APPROVED);
+        } else {
+            booking.setStatus(Status.REJECTED);
+        }
+        bookingRepository.save(booking);
+        return BookingMapper.mapToBookingDto(booking);
     }
 }
