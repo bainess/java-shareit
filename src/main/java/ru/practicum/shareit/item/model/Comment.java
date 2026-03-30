@@ -26,7 +26,6 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
-   // @JsonIgnore
     private Item item;
 
     @NotBlank
