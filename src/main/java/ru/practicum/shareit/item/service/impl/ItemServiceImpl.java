@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dal.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.ForbiddenException;
+import ru.practicum.shareit.exception.IllegalAccessException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.CommentRepository;
 import ru.practicum.shareit.item.dal.ItemRepository;
@@ -39,8 +40,8 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto saveComment(Long userId, Long itemId, NewCommentRequest request) {
         log.debug(request.getText());
         LocalDateTime created = LocalDateTime.now();
-        if (!bookingRepository.existsByItem_IdAndBooker_IdAndEndBefore(itemId, userId, created)) {
-            throw new NotFoundException(" User" + userId + " did not book the item" + itemId);
+        if (!bookingRepository.existsByItem_IdAndBooker_IdAndEndAfter(itemId, userId, created)) {
+            throw new IllegalAccessException(" User" + userId + " did not book the item" + itemId);
         }
         Comment comment = CommentMapper.mapToComment(request);
         User author = userRepository.findById(userId).get();
@@ -94,7 +95,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.itemToDto(item);
     }
 
-    public ItemDtoWithBookingDatesAndComments getItemById(Long itemId) {
+    public ItemDtoWithBookingDatesAndComments getItemById(Long userId, Long itemId) {
         LocalDateTime now = LocalDateTime.now();
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ForbiddenException("Item was not found"));
         Booking lastBooking = bookingRepository.findFirstByItem_IdAndEndAfterOrderByEndDesc(item.getId(), now)

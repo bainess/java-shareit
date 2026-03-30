@@ -16,7 +16,7 @@ public interface ItemService {
 
     ItemDto saveItem(Long userId, NewItemRequest item);
 
-    ItemDtoWithBookingDatesAndComments getItemById(Long itemId);
+    ItemDtoWithBookingDatesAndComments getItemById(Long userId, Long itemId);
 
     List<ItemDto> searchItems(String text);
 

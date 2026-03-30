@@ -48,9 +48,10 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDtoWithBookingDatesAndComments getItemById(@PathVariable(name = "itemId") Long itemId) {
+    public ItemDtoWithBookingDatesAndComments getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                                          @PathVariable(name = "itemId") Long itemId) {
         log.debug("request for item {}", itemId);
-        return itemService.getItemById(itemId);
+        return itemService.getItemById(userId, itemId);
     }
 
     @PostMapping
