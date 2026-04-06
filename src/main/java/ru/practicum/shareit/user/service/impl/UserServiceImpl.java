@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import ru.practicum.shareit.user.service.UserService;
 @Slf4j
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User updatedUser = userRepository.findById(userId)
-                .map(user -> UserMapper.fieldsToUpdate(user,request))
+                .map(user -> UserMapper.fieldsToUpdate(user, request))
                 .orElseThrow(() -> new NotFoundException("User was not found"));
         userRepository.save(updatedUser);
         return UserMapper.maptoUserDto(updatedUser);
