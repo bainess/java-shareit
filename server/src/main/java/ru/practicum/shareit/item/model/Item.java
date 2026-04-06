@@ -1,0 +1,58 @@
+package ru.practicum.shareit.item.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
+import ru.practicum.shareit.user.User;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@Entity
+@ToString
+@Table(name = "items")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+
+    @Column(nullable = false)
+    private String name;
+
+
+    @Column(nullable = false)
+    private String description;
+
+
+    private Boolean available;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Item)) return false;
+        return id != null && id.equals(((Item) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setItem(this);
+    }
+}

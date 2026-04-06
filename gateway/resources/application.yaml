@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: shareit-gateway
+
+jackson:
+  serialization:
+    fail-on-empty-beans: false
+
+logging:
+  level:
+    ru.practicum.shareit: DEBUG
+
+shareit:
+  server:
+    url: ${SHAREIT_SERVER_URL:http://localhost:9090}
