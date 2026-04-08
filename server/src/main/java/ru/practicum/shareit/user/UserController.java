@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody NewUserRequest request) {
         UserDto user = userService.saveUser(request);
-        log.info("Created ru.practicum.shareit.ru.practicum.shareit.user.id {}", user.getId());
+        log.info("Created user.id {}", user.getId());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

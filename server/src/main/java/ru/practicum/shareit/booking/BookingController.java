@@ -31,6 +31,7 @@ public class BookingController {
     public BookingDto approveBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
                                      @PathVariable(name = "bookingId") Long bookingId,
                                      @RequestParam("approved") boolean isApproved) {
+        log.debug("User {} approve booking {} - {}", userId, bookingId, isApproved);
         BookingDto dto = bookingService.saveApproval(userId, bookingId, isApproved);
         return dto;
     }

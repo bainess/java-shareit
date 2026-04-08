@@ -41,7 +41,7 @@ public class BookingService {
 
         Pageable pageable = PageRequest.of(from / size, size);
 
-        log.info("ru.practicum.shareit.ru.practicum.shareit.user id {} requests {}", userId, state);
+        log.info("user id {} requests {}", userId, state);
         return switch (state) {
             case CURRENT -> bookingRepository.findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
@@ -115,6 +115,8 @@ public class BookingService {
     }
 
     public BookingDto saveApproval(Long userId, Long bookingId, boolean isApproved) {
+        log.debug("Service approves user id {}, booking id{}, booking - {}", userId, bookingId, isApproved);
+
         Booking booking = bookingRepository.findByIdAndItem_Owner_Id(bookingId, userId);
         if (isApproved) {
             booking.setStatus(Status.APPROVED);
