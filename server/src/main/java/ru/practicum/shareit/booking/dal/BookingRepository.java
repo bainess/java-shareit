@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.dal;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
@@ -26,15 +27,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByItem_Owner_IdAndStatusOrderByStartDesc(Long userId, State state);
 
 
-    List<Booking> findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(Long userId, LocalDateTime now1, LocalDateTime now2);
+    List<Booking> findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(Long userId, LocalDateTime now1, LocalDateTime now2, Pageable pageable);
 
-    List<Booking> findByBooker_IdAndEndBeforeOrderByStartDesc(Long userId, LocalDateTime now);
+    List<Booking> findByBooker_IdAndEndBeforeOrderByStartDesc(Long userId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findByBooker_IdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime now);
+    List<Booking> findByBooker_IdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findByBooker_IdOrderByStartDesc(Long userId);
+    List<Booking> findByBooker_IdOrderByStartDesc(Long userId, Pageable pageable);
 
-    List<Booking> findByBooker_IdAndStatusOrderByStartDesc(Long userId, State state);
+    List<Booking> findByBooker_IdAndStatusOrderByStartDesc(Long userId, State state, Pageable pageable);
 
     List<Booking> findByBooker_Id(Long userId);
 

@@ -15,6 +15,8 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
 import ru.practicum.shareit.exception.IllegalAccessException;
@@ -31,25 +33,27 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    public List<BookingDto> findBookingsByBookerAndState(Long userId, State state) {
+    public List<BookingDto> findBookingsByBookerAndState(Long userId, State state, int from, int size) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalAccessException("User " + userId + " does not exist");
         }
         LocalDateTime now = LocalDateTime.now();
 
+        Pageable pageable = PageRequest.of(from / size, size);
+
         log.info("ru.practicum.shareit.ru.practicum.shareit.user id {} requests {}", userId, state);
         return switch (state) {
-            case CURRENT -> bookingRepository.findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now)
+            case CURRENT -> bookingRepository.findByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
-            case PAST -> bookingRepository.findByBooker_IdAndEndBeforeOrderByStartDesc(userId, now)
+            case PAST -> bookingRepository.findByBooker_IdAndEndBeforeOrderByStartDesc(userId, now, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
-            case FUTURE -> bookingRepository.findByBooker_IdAndStartAfterOrderByStartDesc(userId, now)
+            case FUTURE -> bookingRepository.findByBooker_IdAndStartAfterOrderByStartDesc(userId, now, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
-            case WAITING -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.WAITING)
+            case WAITING -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.WAITING, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
-            case REJECTED -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.REJECTED)
+            case REJECTED -> bookingRepository.findByBooker_IdAndStatusOrderByStartDesc(userId, State.REJECTED, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
-            case ALL -> bookingRepository.findByBooker_IdOrderByStartDesc(userId)
+            case ALL -> bookingRepository.findByBooker_IdOrderByStartDesc(userId, pageable)
                     .stream().map(BookingMapper::mapToBookingDto).toList();
         };
     }

@@ -40,6 +40,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserDto getUser(@PathVariable(name = "userId") Long userId) {
+        log.debug("Get user request: userId {}", userId);
         return userService.getUserById(userId);
     }
 }

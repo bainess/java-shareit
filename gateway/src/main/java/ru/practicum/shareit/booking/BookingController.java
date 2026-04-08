@@ -41,15 +41,15 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Object> bookItem(@RequestHeader("X-Sharer-User-Id") long userId,
-                                           @RequestBody @Valid BookItemRequestDto requestDto) {
-        log.info("Creating ru.practicum.shareit.ru.practicum.shareit.booking {}, userId={}", requestDto, userId);
+                                           @Valid  @RequestBody BookItemRequestDto requestDto) {
+        log.info("Creating booking {}, userId={}", requestDto, userId);
         return bookingClient.bookItem(userId, requestDto);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") long userId,
                                              @PathVariable Long bookingId) {
-        log.info("Get ru.practicum.shareit.ru.practicum.shareit.booking {}, userId={}", bookingId, userId);
+        log.info("Get booking {}, userId={}", bookingId, userId);
         return bookingClient.getBooking(userId, bookingId);
     }
 }

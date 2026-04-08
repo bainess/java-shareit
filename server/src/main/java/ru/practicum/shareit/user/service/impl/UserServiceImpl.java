@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service.impl;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import ru.practicum.shareit.user.service.UserService;
 @NoArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserRepository userRepository;
 
     @Transactional
@@ -39,7 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long userId, UpdateUserRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        log.debug("User name {}, email {}", request.getName(),request.getEmail());
+
+        if (request.hasEmail() && userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicatedDataException("This email is registered");
         }
 
