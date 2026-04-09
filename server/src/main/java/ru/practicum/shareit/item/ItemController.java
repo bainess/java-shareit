@@ -39,7 +39,7 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDtoWithBookingDatesAndComments> getItemsByUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.debug("Request for items by ru.practicum.shareit.ru.practicum.shareit.user {}", userId);
+        log.debug("Request for items by user {}", userId);
         return itemService.findAllItemsByUser(userId);
     }
 
@@ -48,7 +48,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDtoWithBookingDatesAndComments getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                           @PathVariable(name = "itemId") Long itemId) {
-        log.debug("request for ru.practicum.shareit.ru.practicum.shareit.item {}", itemId);
+        log.debug("request for item {}", itemId);
         return itemService.getItemById(userId, itemId);
     }
 

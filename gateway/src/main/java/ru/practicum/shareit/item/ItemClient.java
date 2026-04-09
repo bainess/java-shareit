@@ -8,7 +8,11 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ItemClient extends BaseClient {
@@ -26,5 +30,13 @@ public class ItemClient extends BaseClient {
 
     public ResponseEntity<Object> createItem(Long userId, NewItemRequest request) {
         return post("", userId, request);
+    }
+
+    public ResponseEntity<Object> saveComment(Long userId, Long itemId, CommentDto comment) {
+        return post("/" + itemId + "/comment", userId, comment);
+    }
+
+    public ResponseEntity<Object> getItem(Long userId, Long itemId) {
+        return get("/" + itemId, userId);
     }
 }
