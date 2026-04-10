@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.User;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class Item {
     @Column(nullable = false)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private Request request;
 
     private Boolean available;
 

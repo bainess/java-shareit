@@ -22,6 +22,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
+import ru.practicum.shareit.request.dal.RequestRepository;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
 import java.util.List;
@@ -37,6 +39,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final RequestRepository requestRepository;
 
     public CommentDto saveComment(Long userId, Long itemId, NewCommentRequest request) {
         log.debug(request.getText());
@@ -44,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
         if (bookingRepository.existsByItem_IdAndBooker_IdAndEndAfter(itemId, userId, created)) {
             throw new IllegalAccessException(" User" + userId + " did not book the ru.practicum.shareit.ru.practicum.shareit.item" + itemId);
         }
+
         Comment comment = CommentMapper.mapToComment(request);
         User author = userRepository.findById(userId).get();
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item " + itemId + " was not found"));
@@ -81,16 +85,22 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.itemToDto(updatedItem);
     }
 
-    public ItemDto saveItem(Long userId, NewItemRequest request) {
+    public ItemDto saveItem(Long userId, NewItemRequest itemRequest) {
         if (userId == null) {
             throw new NotFoundException("User does not exist");
         }
-        if (request.getAvailable() == null) {
+        if (itemRequest.getAvailable() == null) {
             throw new IllegalArgumentException("Availability should be set");
         }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User " + userId + "was not found"));
-        Item item = ItemMapper.mapToItem(user, request);
+
+        Item item = ItemMapper.mapToItem(user, itemRequest);
+
+        if (itemRequest.getRequestId() != null) {
+            log.debug("Getting item with request {}", requestRepository.findById(itemRequest.getRequestId()));
+            item.setRequest(requestRepository.findById(itemRequest.getRequestId()).orElseThrow(() -> new NotFoundException("Request id " + itemRequest.getRequestId()+ " not found")));
+        }
 
         item = itemRepository.save(item);
         return ItemMapper.itemToDto(item);

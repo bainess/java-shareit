@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RequestDto {
+public class RequestNoItems{
     private Long id;
     private String description;
     private LocalDateTime created;
-    private List<Item> items;
+
 }

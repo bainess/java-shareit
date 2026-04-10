@@ -2,9 +2,14 @@ package ru.practicum.shareit.request.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dto.RequestMapper;
+import ru.practicum.shareit.request.dto.RequestNoItems;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +33,15 @@ public class Request {
 
     @Column(nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "request")
+    List<Item> items = new ArrayList<>();
+
+    public void addItem(Item item) {
+        items.add(item);
+        item.setRequest(this);
+    }
+
 
     @Override
     public final boolean equals(Object o) {

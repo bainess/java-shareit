@@ -8,8 +8,18 @@ public class RequestMapper {
         dto.setId(request.getId());
         dto.setDescription(request.getDescription());
         dto.setCreated(request.getCreated());
+        dto.setItems(request.getItems());
         return dto;
     }
+
+    public static RequestDto mapToRequestNoItems(Request request) {
+        RequestDto dto = new RequestDto();
+        dto.setId(request.getId());
+        dto.setDescription(request.getDescription());
+        dto.setCreated(request.getCreated());
+        return dto;
+    }
+
 
     public static Request mapToRequest(NewRequestDto dto) {
         Request request = new Request();
