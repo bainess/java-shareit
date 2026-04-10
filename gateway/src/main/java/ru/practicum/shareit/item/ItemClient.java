@@ -11,9 +11,6 @@ import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.NewItemRequest;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class ItemClient extends BaseClient {
     private static final String API_PREFIX = "/items";

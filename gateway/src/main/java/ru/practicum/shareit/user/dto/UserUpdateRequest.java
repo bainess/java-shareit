@@ -1,8 +1,10 @@
 package ru.practicum.shareit.user.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
@@ -18,10 +20,10 @@ public class UserUpdateRequest {
     private String name;
 
     public boolean hasEmail() {
-        return ! (email == null || email.isBlank());
+        return !(email == null || email.isBlank());
     }
 
     public boolean hasName() {
-        return ! (name == null || name.isBlank());
+        return !(name == null || name.isBlank());
     }
 }

@@ -7,7 +7,6 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.ItemRepository;
 import ru.practicum.shareit.item.dto.item.ItemDto;
 import ru.practicum.shareit.item.dto.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dal.RequestRepository;
 import ru.practicum.shareit.request.dto.NewRequestDto;
 import ru.practicum.shareit.request.dto.RequestDto;
@@ -29,7 +28,7 @@ public class RequestService {
 
     public RequestDto saveRequest(Long userId, NewRequestDto dto) {
         Request request = RequestMapper.mapToRequest(dto);
-        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User id " + userId + "was not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id " + userId + "was not found"));
         request.setRequestor(user);
         request.setCreated(LocalDateTime.now());
 
@@ -42,7 +41,7 @@ public class RequestService {
                 .orElseThrow(() -> new NotFoundException("Request " + requestId + " by user " + userId + " was not found"));
         List<ItemDto> items = itemRepository.findAllByRequest_Id(requestId).stream().map(ItemMapper::itemToDto).toList();
 
-        return RequestMapper.mapToDtoWithItemList(request,items);
+        return RequestMapper.mapToDtoWithItemList(request, items);
     }
 
     public List<RequestDto> getAllRequestsByUser(Long userId) {

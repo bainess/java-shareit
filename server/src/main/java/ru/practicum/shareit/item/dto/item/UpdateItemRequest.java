@@ -17,22 +17,22 @@ public class UpdateItemRequest {
     private LocalDate bookedTo;
 
     public boolean hasName() {
-        return ! (name == null || name.isBlank());
+        return !(name == null || name.isBlank());
     }
 
     public boolean hasDescription() {
-        return ! (description == null || description.isBlank());
+        return !(description == null || description.isBlank());
     }
 
     public boolean hasAvailability() {
-        return ! (available == null);
+        return !(available == null);
     }
 
     public boolean hasBookedFrom() {
-        return ! (bookedFrom == null);
+        return !(bookedFrom == null);
     }
 
     public boolean hasBookedTo() {
-        return ! (bookedTo == null);
+        return !(bookedTo == null);
     }
 }

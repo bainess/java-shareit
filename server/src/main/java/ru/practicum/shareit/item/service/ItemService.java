@@ -7,7 +7,6 @@ import ru.practicum.shareit.item.dto.item.ItemDtoWithBookingDatesAndComments;
 import ru.practicum.shareit.item.dto.item.NewItemRequest;
 import ru.practicum.shareit.item.dto.item.UpdateItemRequest;
 
-
 import java.util.List;
 
 public interface ItemService {
