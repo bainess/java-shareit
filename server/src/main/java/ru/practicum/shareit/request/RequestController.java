@@ -2,11 +2,9 @@ package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.NewRequestDto;
 import ru.practicum.shareit.request.dto.RequestDto;
-import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.service.RequestService;
 
 import java.util.List;
@@ -33,7 +31,7 @@ public class RequestController {
     }
 
     @GetMapping
-    public List<RequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id")Long userId) {
+    public List<RequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("User {} gets their requests", userId);
         return requestService.getAllRequestsByUser(userId);
     }

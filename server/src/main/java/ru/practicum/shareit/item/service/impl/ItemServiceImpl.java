@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import ru.practicum.shareit.booking.dal.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.IllegalAccessException;
@@ -21,17 +20,14 @@ import ru.practicum.shareit.item.dto.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
-
 import ru.practicum.shareit.request.dal.RequestRepository;
-import ru.practicum.shareit.request.dto.RequestDto;
-import ru.practicum.shareit.request.dto.RequestMapper;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
-import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -101,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (itemRequest.getRequestId() != null) {
             log.debug("Getting item with request {}", requestRepository.findById(itemRequest.getRequestId()));
-            Request request = requestRepository.findById(itemRequest.getRequestId()).orElseThrow(() -> new NotFoundException("Request id " + itemRequest.getRequestId()+ " not found"));
+            Request request = requestRepository.findById(itemRequest.getRequestId()).orElseThrow(() -> new NotFoundException("Request id " + itemRequest.getRequestId() + " not found"));
             item.setRequest(request);
         }
 

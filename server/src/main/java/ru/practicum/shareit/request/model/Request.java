@@ -36,7 +36,6 @@ public class Request {
     List<Item> items = new ArrayList<>();
 
 
-
     @Override
     public final boolean equals(Object o) {
         if (!(o instanceof Request request)) return false;

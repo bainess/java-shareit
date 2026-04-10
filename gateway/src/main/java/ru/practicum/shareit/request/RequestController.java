@@ -8,7 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.RequestDto;
 
-@Controller@RequestMapping(path = "/requests")
+@Controller
+@RequestMapping(path = "/requests")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
@@ -23,8 +24,8 @@ public class RequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getRequestByIdandUserId(@RequestHeader("X-Sharer-User-Id")Long userId,
-                                             @PathVariable(name = "requestId") Long requestId) {
+    public ResponseEntity<Object> getRequestByIdandUserId(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                                          @PathVariable(name = "requestId") Long requestId) {
         log.info("User {} requests request {}", userId, requestId);
         return requestClient.getRequestById(userId, requestId);
     }

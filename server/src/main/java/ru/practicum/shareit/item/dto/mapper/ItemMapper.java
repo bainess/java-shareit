@@ -5,9 +5,7 @@ import ru.practicum.shareit.item.dto.item.ItemDtoWithBookingDatesAndComments;
 import ru.practicum.shareit.item.dto.item.NewItemRequest;
 import ru.practicum.shareit.item.dto.item.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
-
 import ru.practicum.shareit.user.User;
-
 
 import java.time.LocalDateTime;
 
@@ -44,7 +42,7 @@ public final class ItemMapper {
 
     public static Item updateItemFields(Item item, UpdateItemRequest request) {
         if (request.hasName()) {
-                item.setName(request.getName());
+            item.setName(request.getName());
         }
 
         if (request.hasDescription()) {
