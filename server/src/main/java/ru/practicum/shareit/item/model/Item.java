@@ -2,9 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 import ru.practicum.shareit.user.User;
-
 
 import java.util.ArrayList;
 import java.util.List;
