@@ -45,4 +45,9 @@ public class RequestService {
         return RequestMapper.mapToDtoWithItemList(request,items);
     }
 
+    public List<RequestDto> getAllRequestsByUser(Long userId) {
+        List<Request> requests = requestRepository.findAllByRequestor_Id(userId);
+        return requests.stream().map(RequestMapper::mapToDto).toList();
+    }
+
 }

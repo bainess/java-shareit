@@ -28,4 +28,10 @@ public class RequestController {
         log.info("User {} requests request {}", userId, requestId);
         return requestClient.getRequestById(userId, requestId);
     }
+
+    @GetMapping
+    public ResponseEntity<Object> getRequestsByUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("User {} requests their requests");
+        return requestClient.getRequestsByUser(userId);
+    }
 }

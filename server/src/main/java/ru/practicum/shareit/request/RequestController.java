@@ -9,6 +9,8 @@ import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.service.RequestService;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -28,5 +30,11 @@ public class RequestController {
                                  @PathVariable(name = "requestId") Long requestId) {
         log.info("User {} requires request {}", userId, requestId);
         return requestService.getRequest(userId, requestId);
+    }
+
+    @GetMapping
+    public List<RequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id")Long userId) {
+        log.info("User {} gets their requests", userId);
+        return requestService.getAllRequestsByUser(userId);
     }
 }
