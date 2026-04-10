@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.ItemRepository;
+import ru.practicum.shareit.item.dto.item.ItemDto;
+import ru.practicum.shareit.item.dto.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dal.RequestRepository;
 import ru.practicum.shareit.request.dto.NewRequestDto;
@@ -38,9 +40,9 @@ public class RequestService {
     public RequestDto getRequest(Long userId, Long requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Request " + requestId + " by user " + userId + " was not found"));
-        log.debug("Request {}", request);
+        List<ItemDto> items = itemRepository.findAllByRequest_Id(requestId).stream().map(ItemMapper::itemToDto).toList();
 
-        return RequestMapper.mapToDto(request);
+        return RequestMapper.mapToDtoWithItemList(request,items);
     }
 
 }

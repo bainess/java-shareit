@@ -37,10 +37,6 @@ public class Request {
     @OneToMany(mappedBy = "request")
     List<Item> items = new ArrayList<>();
 
-    public void addItem(Item item) {
-        items.add(item);
-        item.setRequest(this);
-    }
 
 
     @Override

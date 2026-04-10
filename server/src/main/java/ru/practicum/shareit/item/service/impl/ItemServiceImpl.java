@@ -23,6 +23,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import ru.practicum.shareit.request.dal.RequestRepository;
+import ru.practicum.shareit.request.dto.RequestDto;
+import ru.practicum.shareit.request.dto.RequestMapper;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dal.UserRepository;
@@ -99,7 +101,8 @@ public class ItemServiceImpl implements ItemService {
 
         if (itemRequest.getRequestId() != null) {
             log.debug("Getting item with request {}", requestRepository.findById(itemRequest.getRequestId()));
-            item.setRequest(requestRepository.findById(itemRequest.getRequestId()).orElseThrow(() -> new NotFoundException("Request id " + itemRequest.getRequestId()+ " not found")));
+            Request request = requestRepository.findById(itemRequest.getRequestId()).orElseThrow(() -> new NotFoundException("Request id " + itemRequest.getRequestId()+ " not found"));
+            item.setRequest(request);
         }
 
         item = itemRepository.save(item);

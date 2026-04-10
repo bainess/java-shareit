@@ -10,12 +10,11 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findByRequest_Id(Long requestId);
+    List<Item> findAllByRequest_Id(Long requestId);
     List<Item> findByOwnerId(Long ownerId);
 
     List<Item> findByAvailableTrueAndNameContainingIgnoreCaseOrAvailableTrueAndDescriptionContainingIgnoreCase(
             String name, String description
     );
-
     Optional<Item> findByIdAndAvailableTrue(Long id);
 }

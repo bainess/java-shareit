@@ -26,6 +26,6 @@ public class RequestController {
     public ResponseEntity<Object> getRequestByIdandUserId(@RequestHeader("X-Sharer-User-Id")Long userId,
                                              @PathVariable(name = "requestId") Long requestId) {
         log.info("User {} requests request {}", userId, requestId);
-        return requestClient.getRequestByIdAndUser(userId, requestId);
+        return requestClient.getRequestById(userId, requestId);
     }
 }
