@@ -1,12 +1,12 @@
 package ru.practicum.shareit.user.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserDto {
     private Long id;
     private String email;
