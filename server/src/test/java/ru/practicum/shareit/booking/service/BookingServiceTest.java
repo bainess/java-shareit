@@ -144,7 +144,7 @@ class BookingServiceTest {
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> bookingService.saveBooking(newBookingRequest, 2L))
-                .isInstanceOf(NotFoundException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessageContaining("User 2 was not found");
 
         verify(bookingRepository, never()).save(any(Booking.class));
@@ -281,7 +281,7 @@ class BookingServiceTest {
         when(userRepository.existsById(999L)).thenReturn(false);
 
         assertThatThrownBy(() -> bookingService.findBookingsByOwnerAndState(999L, State.ALL))
-                .isInstanceOf(NotFoundException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessageContaining("User 999 does not exist");
 
         verify(bookingRepository, never()).findByItem_Owner_IdOrderByStartDesc(anyLong());

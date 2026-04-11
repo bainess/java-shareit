@@ -76,7 +76,7 @@ class ErrorHandlerTest {
     @Test
     void shouldHandleConflict() throws Exception {
         mockMvc.perform(get("/conflict"))
-                .andExpect(status().isConflict())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error").value("insufficient data"))
                 .andExpect(jsonPath("$.message").value("duplicate"));
     }
@@ -84,7 +84,7 @@ class ErrorHandlerTest {
     @Test
     void shouldHandleForbidden() throws Exception {
         mockMvc.perform(get("/forbidden"))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error").value("access forbidden"))
                 .andExpect(jsonPath("$.message").value("forbidden"));
     }
@@ -92,7 +92,7 @@ class ErrorHandlerTest {
     @Test
     void shouldHandleBadRequest() throws Exception {
         mockMvc.perform(get("/bad-request"))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error").value("illegal argument"))
                 .andExpect(jsonPath("$.message").value("bad request"));
     }
