@@ -1,47 +1,67 @@
 package ru.practicum.shareit.exception.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import ru.practicum.shareit.exception.DuplicatedDataException;
-import ru.practicum.shareit.exception.ForbiddenException;
-
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.DuplicatedDataException;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 
+import java.util.Map;
 
-import java.awt.*;
-
+@Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        return new ErrorResponse(e.getMessage(), "not found");
+    public Map<String, String> handleNotFound(NotFoundException e) {
+        log.error("Not found error: {}", e.getMessage());
+        return Map.of(
+                "error", "not found",
+                "message", e.getMessage()
+        );
     }
 
     @ExceptionHandler(DuplicatedDataException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDuplicatedDataException(final DuplicatedDataException e) {
-        return new ErrorResponse(e.getMessage(), "insufficient data");
+    public Map<String, String> handleConflict(DuplicatedDataException e) {
+        log.error("Conflict error: {}", e.getMessage());
+        return Map.of(
+                "error", "insufficient data",
+                "message", e.getMessage()
+        );
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(final Exception e) {
-        return new ErrorResponse(e.getMessage(), "internal error");
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> handleForbidden(ForbiddenException e) {
+        log.error("Forbidden error: {}", e.getMessage());
+        return Map.of(
+                "error", "access forbidden",
+                "message", e.getMessage()
+        );
     }
 
     @ExceptionHandler(IllegalAccessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIllegalArgumentException(final IllegalAccessException e) {
-        return new ErrorResponse(e.getMessage(), "illegal argument");
+    public Map<String, String> handleBadRequest(IllegalAccessException e) {
+        log.error("Bad request error: {}", e.getMessage());
+        return Map.of(
+                "error", "illegal argument",
+                "message", e.getMessage()
+        );
     }
 
-    @ExceptionHandler(FontFormatException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleIllegalArgumentException(final ForbiddenException e) {
-        return new ErrorResponse(e.getMessage(), "access forbidden");
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleRuntimeException(RuntimeException e) {
+        log.error("Internal error: {}", e.getMessage(), e);
+        return Map.of(
+                "error", "internal error",
+                "message", e.getMessage()
+        );
     }
 }
