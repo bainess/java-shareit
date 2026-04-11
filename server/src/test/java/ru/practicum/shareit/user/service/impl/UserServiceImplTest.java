@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.dto.NewUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 
-
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,7 +70,6 @@ public class UserServiceImplTest {
 
         User user = User.builder().id(1L).name("Ivan").email("ivan@mail.ru").build();
 
-        User savedUser = User.builder().id(1L).name("Ivan").email("ivan-ivanov@mail.ru").build();
         Mockito
                 .when(userRepository.existsByEmail("ivan-ivanov@mail.ru"))
                 .thenReturn(false);
@@ -124,5 +122,35 @@ public class UserServiceImplTest {
         Mockito.verify(userRepository).deleteById(userId);
 
         Assertions.assertEquals(userId, result);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailExists() {
+        NewUserRequest user = NewUserRequest.builder().name("Ivan").email("ivan@mail.ru").build();
+
+        Mockito
+                .when(userRepository.existsByEmail("ivan@mail.ru"))
+                .thenReturn(true);
+
+        Assertions.assertThrows(DuplicatedDataException.class, () -> userService.saveUser(user));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingWithExistingEmail() {
+        UpdateUserRequest updateRequest = UpdateUserRequest.builder().name("ivan").email("ivanov@mail.ru").build();
+
+        Mockito
+                .when(userRepository.existsByEmail("ivanov@mail.ru"))
+                .thenReturn(true);
+
+        Assertions.assertThrows(DuplicatedDataException.class, () -> userService.updateUser(1L, updateRequest));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> userService.getUserById(1L));
     }
 }

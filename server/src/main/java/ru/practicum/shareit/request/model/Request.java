@@ -17,6 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class Request {
 
     @Id

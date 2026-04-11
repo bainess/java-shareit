@@ -43,11 +43,11 @@ public class ItemServiceImpl implements ItemService {
         log.debug(request.getText());
         LocalDateTime created = LocalDateTime.now();
         if (bookingRepository.existsByItem_IdAndBooker_IdAndEndAfter(itemId, userId, created)) {
-            throw new IllegalAccessException(" User" + userId + " did not book the ru.practicum.shareit.ru.practicum.shareit.item" + itemId);
+            throw new IllegalAccessException(" User" + userId + " did not book the item" + itemId);
         }
 
         Comment comment = CommentMapper.mapToComment(request);
-        User author = userRepository.findById(userId).get();
+        User author = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User " + userId + " was not found"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item " + itemId + " was not found"));
 
         comment.setCreated(created);
@@ -67,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime now = LocalDateTime.now();
                     Booking lastBooking = bookingRepository.findFirstByItem_IdAndEndAfterOrderByEndDesc(item.getId(), now).orElse(new Booking());
                     Booking nextBooking = bookingRepository.findFirstByItem_IdAndStartAfterOrderByStartAsc(item.getId(), now).orElse(new Booking());
-                    log.debug("next ru.practicum.shareit.ru.practicum.shareit.booking{}", nextBooking);
+                    log.debug("next booking{}", nextBooking);
                     return ItemMapper.itemToDtoWithBookingDatesAndComments(item, lastBooking.getEnd(), nextBooking.getEnd());
                 })
                 .toList();
@@ -119,7 +119,6 @@ public class ItemServiceImpl implements ItemService {
                 ItemMapper.itemToDtoWithBookingDatesAndComments(item, nextBooking.getEnd(), lastBooking.getEnd());
         dto.setComments(comments);
         return dto;
-
     }
 
 

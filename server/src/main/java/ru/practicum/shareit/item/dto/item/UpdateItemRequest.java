@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.dto.item;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class UpdateItemRequest {
     private Long id;
     private Long owner;
