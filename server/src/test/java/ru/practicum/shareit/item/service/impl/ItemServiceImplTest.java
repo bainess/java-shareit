@@ -267,8 +267,16 @@ public class ItemServiceImplTest {
     void shouldUpdateItem() {
         Long userId = 1L;
         Long itemId = 2L;
+        LocalDateTime bookedFrom = LocalDateTime.now();
+        LocalDateTime bookedTo = LocalDateTime.now().plusDays(1);
         Item item = Item.builder().id(6L).name("item").description("item description").available(true).build();
-        UpdateItemRequest updateRequest = UpdateItemRequest.builder().name("tool").description("new tool description").available(false).build();
+        UpdateItemRequest updateRequest = UpdateItemRequest.builder()
+                .name("tool")
+                .description("new tool description")
+                .available(false)
+                .bookedFrom(bookedFrom)
+                .bookedTo(bookedTo)
+                .build();
         User user = User.builder().id(4L).name("ivan").build();
 
         Mockito.when(userRepository.findById(Mockito.anyLong()))

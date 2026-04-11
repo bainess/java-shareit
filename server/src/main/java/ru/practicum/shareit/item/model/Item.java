@@ -5,6 +5,7 @@ import lombok.*;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class Item {
     private Request request;
 
     private Boolean available;
+
+    private LocalDateTime bookedFrom;
+    private LocalDateTime bookedTo;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
