@@ -26,7 +26,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(DuplicatedDataException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleConflict(DuplicatedDataException e) {
         log.error("Conflict error: {}", e.getMessage());
         return Map.of(
@@ -36,7 +36,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleForbidden(ForbiddenException e) {
         log.error("Forbidden error: {}", e.getMessage());
         return Map.of(
@@ -46,7 +46,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(IllegalAccessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleBadRequest(IllegalAccessException e) {
         log.error("Bad request error: {}", e.getMessage());
         return Map.of(

@@ -61,7 +61,7 @@ public class BookingService {
 
     public List<BookingDto> findBookingsByOwnerAndState(Long userId, State state) {
         if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("User " + userId + " does not exist");
+            throw new ForbiddenException("User " + userId + " does not exist");
         }
         LocalDateTime now = LocalDateTime.now();
 
@@ -88,7 +88,7 @@ public class BookingService {
 
         if (!Objects.equals(userId, booking.getBooker().getId())
                 && !Objects.equals(userId, booking.getItem().getOwner().getId())) {
-            throw new IllegalAccessException("User " + userId + "   does not have access to the ru.practicum.shareit.ru.practicum.shareit.booking");
+            throw new IllegalAccessException("User " + userId + "   does not have access to the booking");
         }
 
         return BookingMapper.mapToBookingDto(booking);
@@ -103,7 +103,7 @@ public class BookingService {
         }
 
         User booker = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User " + userId + " was not found"));
+                .orElseThrow(() -> new ForbiddenException("User " + userId + " was not found"));
 
 
         Booking booking = BookingMapper.mapToBooking(booker, item, newBooking);
