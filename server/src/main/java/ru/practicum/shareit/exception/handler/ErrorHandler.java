@@ -36,7 +36,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleForbidden(ForbiddenException e) {
         log.error("Forbidden error: {}", e.getMessage());
         return Map.of(
