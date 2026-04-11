@@ -1,14 +1,14 @@
 package ru.practicum.shareit.item.dto.comment;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CommentDto {
     private Long id;
     private Long itemId;
